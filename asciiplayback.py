@@ -157,6 +157,9 @@ subframe = 0
 
 animend = len(content) - 1
 playing = True
+wasplaying = True
+forward = True
+spfactor = 1.0
 
 # Main playback loop
 while True:
@@ -164,28 +167,59 @@ while True:
         if event.type == QUIT:
             exit()
         if event.type == KEYDOWN:
+            # ESC: quit
             if event.key == K_ESCAPE:
                 exit()
+            # Space: Pause/play
             if event.key == K_SPACE:
                 playing = not playing
+            # Left: Step backward
             if (event.key == K_LEFT or event.key == K_KP4) and frame > 0:
                 frame -= 1
                 subframe = 0
+            # Right: Step forward
             if (event.key == K_RIGHT or event.key == K_KP6) and \
                frame < animend:
                 frame += 1
                 subframe = 0
+            # Home: Skip to beginning
             if event.key == K_HOME or event.key == K_KP7:
                 frame = 0
                 subframe = 0
+            # End: Skip to end
             if event.key == K_END or event.key == K_KP1:
                 frame = animend
                 subframe = 0
+            # Page Up: Rewind
+            if event.key == K_PAGEUP or event.key == K_KP9:
+                forward = False
+                wasplaying = playing
+                playing = True
+                spfactor = 0.5
+            # Page Down: Fast-forward
+            if event.key == K_PAGEDOWN or event.key == K_KP3:
+                forward = True
+                wasplaying = playing
+                playing = True
+                spfactor = 0.5
+            # L: toggle loop
             if event.key == K_l:
                 looped = not looped
                 if looped and frame == animend and not playing:
                     playing = True
+        if event.type == KEYUP:
+            # Page Up: Rewind
+            if event.key == K_PAGEUP or event.key == K_KP9:
+                forward = True
+                playing = wasplaying
+                spfactor = 1.0
+            # Page Down: Fast-forward
+            if event.key == K_PAGEDOWN or event.key == K_KP3:
+                forward = True
+                playing = wasplaying
+                spfactor = 1.0
 
+    # Draw the current frame
     screen.fill(cparams[frame][2])
 
     fline = 0
@@ -196,15 +230,20 @@ while True:
 
     pygame.display.update()
 
-    pygame.time.delay(sp)
+    # Delay regardless of playing status so we don't use 100% of the CPU time
+    # while paused
+    pygame.time.delay(int(sp*spfactor))
+
+    # If playing, play in the appropriate direction.
     if playing:
-        subframe += 1
-        if subframe == cparams[frame][0]:
-            if frame < animend:
+        subframe += 1 if forward else -1
+        if subframe >= cparams[frame][0] or subframe < 0:
+            if frame < animend and forward:
                 frame += 1
+            elif frame > 0 and not forward:
+                frame -= 1
+            elif looped:
+                frame = 0 if forward else animend
             else:
-                if looped:
-                    frame = 0
-                else:
-                    playing = False
-            subframe = 0
+                playing = False
+            subframe = 0 if forward else cparams[frame][0] - 1

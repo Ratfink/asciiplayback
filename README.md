@@ -1,11 +1,12 @@
 asciiplayback
 =============
 
-    yo whaddup
-      /
-    \O-            @
-     %\           /X\
-    / \           / \
+    yo waddup                                 |
+        /                       |/            |
+      \O-     \ /       ='_     O-    o   o.o |
+       %\      X    #   /!     /|'   /A\ / a >|
+      / \     /@\ "|"|"  |>    / \ "|"|"  /|  |
+    """""""""""""""""""""""""""""""""""""""""""
 
 This program plays files from [ASCIImator](http://asciimator.net/).  You'll
 need Python 2 and Pygame to use it.  This program is licensed under the MIT
