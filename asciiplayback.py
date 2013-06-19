@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 # asciiplayback.py - Play animations from ASCIImator.net
-# Copyright (c) 2012 Clayton G. Hobbs
+# Copyright (c) 2012-2013 Clayton G. Hobbs
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the
@@ -31,6 +31,11 @@ from sys import exit, argv
 pygame.display.init() 
 pygame.font.init()
 
+# If you want to play a file called '-h' or '--help', use ./ before its name
+if argv[1] == '-h' or argv[1] == '--help':
+    print 'asciiplayback.py - Play animations from ASCIImator.net'
+    print 'Usage: %s [filename]' % argv[0]
+    exit()
 # Load the animation
 am = open(argv[1])
 
@@ -51,6 +56,7 @@ for line in am:
     # Read information about the animation
     if parsemode == 'meta':
         # Font family
+        # TODO: Use ffamily instead of always choosing one font.
         if ls[0] == 'FFamily':
             ffamily = ls[2][1:-2]
         # Font size
@@ -58,13 +64,15 @@ for line in am:
             fsize = int(ls[2][:-1])
         # Font weight
         elif ls[0] == 'FWeight':
-            if ls[2] == 'normal':
+            if ls[2][1:-2] == 'normal':
                 fweight = False
             else:
                 fweight = True
-        # TODO: Figure out what LH does and implement it
+        # Line height
+        # TODO: Figure out why it's better to force lheight to 1.
         elif ls[0] == 'LH':
-            pass
+            lheight = 1.
+            #lheight = int(ls[2][1:-3]) / 100.
         # Milliseconds per frame
         elif ls[0] == 'sp':
             sp = int(ls[2][:-1])
@@ -135,34 +143,68 @@ for line in am:
 
 font = pygame.font.SysFont('DejaVu Sans Mono', fsize, fweight)
 fht = font.get_height()
+fwd = font.size('M'*frwidth)[0]/float(frwidth)
 
-# TODO: Be smart and figure out what these should really be after loading the
-# ASCIImation
-width = 640
-height = 480
+width = int(fwd*frwidth) + 2
+height = int(fht*lheight*frheight) + 2
 
 # Make the display surface
 screen = pygame.display.set_mode((width, height), 0, 32)
 
 # Timekeeping
 frame = 0
+subframe = 0
+
+animend = len(content) - 1
+playing = True
 
 # Main playback loop
-# TODO: Make controls and input handling to operate them
 while True:
     for event in pygame.event.get():
         if event.type == QUIT:
             exit()
+        if event.type == KEYDOWN:
+            if event.key == K_ESCAPE:
+                exit()
+            if event.key == K_SPACE:
+                playing = not playing
+            if (event.key == K_LEFT or event.key == K_KP4) and frame > 0:
+                frame -= 1
+                subframe = 0
+            if (event.key == K_RIGHT or event.key == K_KP6) and \
+               frame < animend:
+                frame += 1
+                subframe = 0
+            if event.key == K_HOME or event.key == K_KP7:
+                frame = 0
+                subframe = 0
+            if event.key == K_END or event.key == K_KP1:
+                frame = animend
+                subframe = 0
+            if event.key == K_l:
+                looped = not looped
+                if looped and frame == animend and not playing:
+                    playing = True
 
     screen.fill(cparams[frame][2])
 
     fline = 0
     for line in content[frame].split('\n'):
         screen.blit(font.render(line, True, cparams[frame][1],
-                    cparams[frame][2]), (0, fline*fht))
+                    cparams[frame][2]), (1, fline*fht*lheight + 1))
         fline += 1
 
     pygame.display.update()
 
-    pygame.time.delay(sp * cparams[frame][0])
-    frame += 1
+    pygame.time.delay(sp)
+    if playing:
+        subframe += 1
+        if subframe == cparams[frame][0]:
+            if frame < animend:
+                frame += 1
+            else:
+                if looped:
+                    frame = 0
+                else:
+                    playing = False
+            subframe = 0
