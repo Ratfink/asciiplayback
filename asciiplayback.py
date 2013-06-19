@@ -142,15 +142,19 @@ for line in am:
                 pass
             cparams.append(frinfo)
 
-font = pygame.font.SysFont('DejaVu Sans Mono', fsize, fweight)
-fht = font.get_height()
-fwd = font.size('M'*frwidth)[0]/float(frwidth)
+def fontset():
+    global font, fht, fwd
+    font = pygame.font.SysFont('DejaVu Sans Mono', fsize, fweight)
+    fht = font.get_height()
+    fwd = font.size('M'*frwidth)[0]/float(frwidth)
+
+fontset()
 
 width = int(fwd*frwidth) + 2
 height = int(fht*lheight*frheight) + 2
 
 # Make the display surface
-screen = pygame.display.set_mode((width, height), 0, 32)
+screen = pygame.display.set_mode((width, height), RESIZABLE)
 
 # Timekeeping
 frame = 0
@@ -167,6 +171,16 @@ while True:
     for event in pygame.event.get():
         if event.type == QUIT:
             exit()
+        if event.type == VIDEORESIZE:
+            width, height = event.size
+            pygame.display.set_mode((width, height), RESIZABLE)
+            for size in range(0, height/frheight):
+                fsize = size
+                fontset()
+                if int(fht*lheight*frheight) + 2 > height or int(fwd*frwidth) + 2 > width:
+                    fsize -= 1
+                    fontset()
+                    break
         if event.type == KEYDOWN:
             # ESC: quit
             if event.key == K_ESCAPE:
@@ -208,6 +222,10 @@ while True:
                 looped = not looped
                 if looped and frame == animend and not playing:
                     playing = True
+            # B: toggle bold
+            if event.key == K_b:
+                fweight = not fweight
+                fontset()
         if event.type == KEYUP:
             # Page Up: Rewind
             if event.key == K_PAGEUP or event.key == K_KP9:
