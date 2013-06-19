@@ -26,6 +26,7 @@ from pygame.locals import *
 # I really doubt we need optparse for a program this simple.  sys.argv should
 # do just fine.
 from sys import exit, argv
+import codecs
 
 # Initialize Pygame
 pygame.display.init() 
@@ -37,7 +38,7 @@ if argv[1] == '-h' or argv[1] == '--help':
     print 'Usage: %s [filename]' % argv[0]
     exit()
 # Load the animation
-am = open(argv[1])
+am = codecs.open(argv[1], 'rb', 'utf-8')
 
 # Create the lists of frame information now
 content = []
@@ -106,7 +107,7 @@ for line in am:
         else:
             # Remove the trailing comma (if any), take off the quotes, and
             # strip out the escape sequences
-            frame = line.strip(',')[1:-1].decode('string_escape')
+            frame = line.strip(',')[1:-1].encode('utf-8').decode('string-escape').decode('utf-8')
             content.append(frame)
     elif parsemode == 'cparams':
         line = line.strip()
@@ -128,13 +129,13 @@ for line in am:
                     frinfo[i] = frinfo[i].strip("'")
             frinfo[0] = int(frinfo[0])
             try:
-                frinfo[1] = pygame.Color(frinfo[1])
+                frinfo[1] = pygame.Color(str(frinfo[1]))
             except ValueError:
                 # This probably means it's already a pygame.Color, so there's
                 # no need to worry
                 pass
             try:
-                frinfo[2] = pygame.Color(frinfo[2])
+                frinfo[2] = pygame.Color(str(frinfo[2]))
             except ValueError:
                 # This probably means it's already a pygame.Color, so there's
                 # no need to worry
