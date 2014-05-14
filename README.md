@@ -51,6 +51,8 @@ controlled as described in the Controls section below.
 * **Left mouse**: restart ASCIImation
 * **Esc**, **Q**: quit
 * **Space**: pause/play
+* **PgUp**: rewind (3 levels, x2, x4, and x8)
+* **PgDn**: fast-forward (3 levels, x2, x4, and x8)
 
 ## Notes
 
