@@ -7,6 +7,8 @@ class ASCIIPlayback(object):
 
         self.asciimation = ASCIImation()
         self.current_frame = 0
+        self.speed = 1
+        self._last_speed = 1
 
         # Parse the ASCIImation file.
         # There are different modes for parsing the file:
@@ -112,22 +114,24 @@ class ASCIIPlayback(object):
     def next_frame(self):
         if self.current_frame == len(self.asciimation):
             if self.asciimation.looped:
-                self.current_frame = 1
+                if self.speed >= 0:
+                    self.current_frame = 0 + self.speed
+                else:
+                    self.current_frame = len(self.asciimation) - 1 + self.speed
             else:
-                raise IndexError("End of ASCIImation reached.")
+                self.current_frame -= self.speed
+                self.toggle_playing()
         else:
-            self.current_frame += 1
-        return self.asciimation[self.current_frame - 1]
-
-    def prev_frame(self):
-        if self.current_frame == -1:
-            if self.asciimation.looped:
-                self.current_frame = len(self.asciimation) - 2
-            else:
-                raise IndexError("Start of ASCIImation reached.")
-        else:
-            self.current_frame -= 1
-        return self.asciimation[self.current_frame + 1]
+            self.current_frame += self.speed
+        return self.asciimation[int(self.current_frame - self.speed)]
 
     def restart(self):
         self.current_frame = 0
+        self.speed = 1
+
+    def toggle_playing(self):
+        if self.speed == 0:
+            self.speed = self._last_speed
+        else:
+            self._last_speed = self.speed
+            self.speed = 0

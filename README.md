@@ -1,5 +1,4 @@
-asciiplayback
-=============
+# ASCIIPlayback
 
     yo waddup                                 |
         /                       |/            |
@@ -8,11 +7,53 @@ asciiplayback
       / \     /@\ "|"|"  |>    / \ "|"|"  /|  |
     """""""""""""""""""""""""""""""""""""""""""
 
-This program plays files from [ASCIImator](http://asciimator.net/).  You'll
-need Python 2 and Pygame to use it.  This program is licensed under the MIT
-license; see `LICENSE` for details.  The plan is to make an easy way to
-download the ASCIImations, but whether that will be handled by a separate
-program or not is to be determined.  Meanwhile, the files to be played can be
-downloaded from `http://asciimator.net/ascii.files/<number>.js`.  The plan is
-also to support ASCIImator Pro files first, then maybe older formats later, as
-the parsing is somewhat different for older versions such as ASCIImator 3.
+ASCIIPlayback is a program which plays files from
+[ASCIImator](http://asciimator.net/).  It depends on Python 2 (tested with
+2.7.6) and Pygame (tested with 1.9.1).  ASCIIPlayback is licensed under the MIT
+license; see `LICENSE` for details.
+
+## Usage
+
+### Downloading
+
+ASCIImations are currently downloaded by download\_asciimation.py, which is
+used as follows:
+
+    $ ./download_asciimation.py URL
+
+where URL is the URL of the page you'd view in order to watch the ASCIImation
+in your web browser.  For instance, to download
+[Intelligence (1)](http://asciimator.net/asciimation/7676), the command would
+be this:
+
+    $ ./download_asciimation.py http://asciimator.net/asciimation/7676
+
+The default filename is the number of the ASCIImation, but this can be changed
+using the -o option.
+
+### Playing
+
+Once an ASCIImation has been downloaded, it can be played using ASCIIPlayback.
+This is done as follows:
+
+    $ src/asciiplaybackpygame.py FILE
+
+where FILE is the name of the file downloaded by download\_asciimation.py.
+Following our example above, this would be something like:
+
+    $ src/asciiplaybackpygame.py 7676.js
+
+A window should appear with the ASCIImation playing.  The player can be
+controlled as described in the Controls section below.
+
+## Controls
+
+**Left mouse**: restart ASCIImation
+**Esc**, **Q**: quit
+**Space**: pause/play
+
+## Notes
+
+Only ASCIImator Pro files are supported at the moment.  The format used by
+older versions of ASCIImator is somewhat different, so they cannot be played at
+this time.  However, in the future, support for these older formats is planned.

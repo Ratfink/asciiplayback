@@ -1,3 +1,5 @@
+#!/usr/bin/env python2
+
 import pygame
 from pygame.locals import *
 from sys import exit, argv
@@ -55,12 +57,15 @@ class ASCIIPlaybackPygame(object):
                 if event.type == QUIT:
                     exit()
                 if event.type == MOUSEBUTTONUP:
-                    self.player.restart()
+                    if event.button == 1:
+                        self.player.restart()
+                if event.type == KEYDOWN:
+                    if event.key == K_ESCAPE or event.key == K_q:
+                        exit()
+                    elif event.key == K_SPACE:
+                        self.player.toggle_playing()
 
-            try:
-                current_frame = self.player.next_frame()
-            except IndexError:
-                pass
+            current_frame = self.player.next_frame()
 
             self.screen.fill(pygame.Color(current_frame.background_color))
 
@@ -84,7 +89,6 @@ class ASCIIPlaybackPygame(object):
 
             pygame.display.update()
             pygame.time.delay(int(self.player.asciimation.speed))
-        print 'wuuut'
 
 if __name__ == "__main__":
     player = ASCIIPlaybackPygame()
