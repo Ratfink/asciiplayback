@@ -40,7 +40,7 @@ u = urlparse.urlparse(url)
 try:
     clip_id = urlparse.parse_qs(u.query)['clip_id']
 except KeyError:
-    clip_id = u.path.split('/')[-1]
+    clip_id = [u.path.split('/')[-1]]
 output = '%s.js'%clip_id[0] if not options.output else options.output
 js_url = 'http://asciimator.net/ascii.files/%s.js' % clip_id[0]
 if options.verbose:
