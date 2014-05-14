@@ -33,9 +33,6 @@ class ASCIImation(object):
         s += "size: {0}".format(self.size)
         return s
 
-    def add_frame(self, frame):
-        self.frames.append(frame)
-
 class Frame(object):
     def __init__(self, text="", duration=1, foreground_color="#000000",
                  background_color="#ffffff"):
@@ -48,5 +45,5 @@ class Frame(object):
         s = "duration: {0}\n".format(self.duration)
         s += "foreground_color: {0}\n".format(self.foreground_color)
         s += "background_color: {0}\n".format(self.background_color)
-        s += "{0}".format(self.text)
+        s += self.text
         return s

@@ -25,7 +25,7 @@ class ASCIIPlayback(object):
                 # Font family
                 # TODO: Use ffamily instead of always choosing one font.
                 if ls[0] == 'FFamily':
-                    self.asciimation.font_family = ls[2][1:-2]
+                    self.asciimation.font_family = ' '.join(ls[2:])[1:-2]
                 # Font size
                 elif ls[0] == 'FSize':
                     self.asciimation.font_size = int(ls[2][:-1])
@@ -69,13 +69,13 @@ class ASCIIPlayback(object):
                     continue
                 # If there's no frame on the line, use the frame from last time
                 elif line == ',':
-                    self.asciimation.add_frame(Frame(text=frame))
+                    self.asciimation.frames.append(Frame(text=frame))
                 else:
                     # Remove the trailing comma (if any), take off the quotes,
                     # and strip out the escape sequences
                     frame = line.strip(',')[1:-1].encode('utf-8').decode(
                         'string-escape').decode('utf-8')
-                    self.asciimation.add_frame(Frame(text=frame))
+                    self.asciimation.frames.append(Frame(text=frame))
             elif parsemode == 'cparams':
                 line = line.strip()
                 if line == '];':
@@ -128,3 +128,6 @@ class ASCIIPlayback(object):
         else:
             self.current_frame -= 1
         return self.asciimation[self.current_frame + 1]
+
+    def restart(self):
+        self.current_frame = 0
