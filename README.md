@@ -48,9 +48,9 @@ controlled as described in the Controls section below.
 
 ## Controls
 
-**Left mouse**: restart ASCIImation
-**Esc**, **Q**: quit
-**Space**: pause/play
+* **Left mouse**: restart ASCIImation
+* **Esc**, **Q**: quit
+* **Space**: pause/play
 
 ## Notes
 
