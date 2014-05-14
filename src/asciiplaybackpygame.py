@@ -64,6 +64,10 @@ class ASCIIPlaybackPygame(object):
                         exit()
                     elif event.key == K_SPACE:
                         self.player.toggle_playing()
+                    elif event.key == K_PAGEUP or event.key == K_KP9:
+                        self.player.rewind()
+                    elif event.key == K_PAGEDOWN or event.key == K_KP3:
+                        self.player.fast_forward()
 
             current_frame = self.player.next_frame()
 
