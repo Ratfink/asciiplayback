@@ -41,7 +41,7 @@ This is done as follows:
 where FILE is the name of the file downloaded by download\_asciimation.py.
 Following our example above, this would be something like:
 
-    $ src/asciiplaybackpygame.py 7676.js
+    $ src/asciiplaybackpygame.py 7676.json
 
 A window should appear with the ASCIImation playing.  The player can be
 controlled as described in the Controls section below.
@@ -56,6 +56,6 @@ controlled as described in the Controls section below.
 
 ## Notes
 
-Only ASCIImator Pro files are supported at the moment.  The format used by
-older versions of ASCIImator is somewhat different, so they cannot be played at
-this time.  However, in the future, support for these older formats is planned.
+Only the new JSON format is supported.  This shouldn't be a problem since all
+ASCIImations have been converted to this new format on ASCIImator, but any old
+format files need to be re-downloaded.

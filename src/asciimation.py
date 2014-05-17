@@ -13,15 +13,15 @@ class ASCIImation(object):
         if key < 0 or key > len(self):
             raise IndexError("Index outside length of ASCIImation")
         current_frame = 0
-        while key >= self.frames[current_frame].duration:
-            key -= self.frames[current_frame].duration
+        while key >= self.frames[current_frame].repeat:
+            key -= self.frames[current_frame].repeat
             current_frame += 1
         return self.frames[current_frame]
 
     def __len__(self):
         length = 0
         for f in self.frames:
-            length += f.duration
+            length += f.repeat
         return length
 
     def __str__(self):
@@ -34,15 +34,15 @@ class ASCIImation(object):
         return s
 
 class Frame(object):
-    def __init__(self, text="", duration=1, foreground_color="#000000",
+    def __init__(self, text="", repeat=1, foreground_color="#000000",
                  background_color="#ffffff"):
         self.text = text
-        self.duration = duration
+        self.repeat = repeat
         self.foreground_color = foreground_color
         self.background_color = background_color
 
     def __str__(self):
-        s = "duration: {0}\n".format(self.duration)
+        s = "repeat: {0}\n".format(self.repeat)
         s += "foreground_color: {0}\n".format(self.foreground_color)
         s += "background_color: {0}\n".format(self.background_color)
         s += self.text

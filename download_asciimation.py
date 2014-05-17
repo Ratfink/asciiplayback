@@ -41,11 +41,11 @@ try:
     clip_id = urlparse.parse_qs(u.query)['clip_id']
 except KeyError:
     clip_id = [u.path.split('/')[-1]]
-output = '%s.js'%clip_id[0] if not options.output else options.output
-js_url = 'http://asciimator.net/ascii.files/%s.js' % clip_id[0]
+output = '%s.json'%clip_id[0] if not options.output else options.output
+json_url = 'http://asciimator.net/ajax/get_json_animation.php?clip_id=%s' % clip_id[0]
 if options.verbose:
-    print 'Downloading %s...' % js_url
-urllib.urlretrieve(js_url, output)
+    print 'Downloading %s...' % json_url
+urllib.urlretrieve(json_url, output)
 
 # TODO: Add ability to get animation title from HTML, use it in filename
 # TODO: Add ability to download all animations by a given user
