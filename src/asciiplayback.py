@@ -1,45 +1,8 @@
-import codecs
-import json
 from asciimation import *
 
 class ASCIIPlayback(object):
     def __init__(self, filename):
-        # Open and load the file
-        f = codecs.open(filename, 'rb', 'utf-8')
-        data = json.load(f)
-        f.close()
-
-        # Create the ASCIImation object
-        self.asciimation = ASCIImation(
-            font_family=data["style"]["family"],
-            font_size=data["style"]["size"],
-            font_bold=True if data["style"]["weight"]=="bold" else False,
-            speed=data["speed"],
-            looped=data["loop"],
-            size=[data["width"], data["height"]]
-        )
-
-        # Add all the frames
-        text = ""
-        repeat = 1
-        foreground_color = "#000000"
-        background_color = "#ffffff"
-        for frame in data["content"]:
-            if "text" in frame:
-                text = frame["text"]
-            if "repeat" in frame:
-                repeat = frame["repeat"]
-            if "fontColor" in frame:
-                foreground_color = str(frame["fontColor"])
-            if "backgroundColor" in frame:
-                background_color = str(frame["backgroundColor"])
-            self.asciimation.frames.append(Frame(
-                text=text,
-                repeat=repeat,
-                foreground_color=foreground_color,
-                background_color=background_color
-            ))
-
+        self.asciimation = ASCIImation(filename=filename)
         self.current_frame = 0
         self.speed = 1
         self._last_speed = 1

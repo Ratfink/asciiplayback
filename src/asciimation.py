@@ -1,13 +1,53 @@
+import codecs
+import json
+
 class ASCIImation(object):
     def __init__(self, font_family="courier new", font_size=12,
-                 font_bold=False, speed=500, looped=True, size=[20, 10]):
-        self.font_family = font_family
-        self.font_size = font_size
-        self.font_bold = font_bold
-        self.speed = speed
-        self.looped = looped
-        self.size = size
-        self.frames = []
+                 font_bold=False, speed=500, looped=True, size=[20, 10],
+                 filename=None):
+        if filename is None:
+            self.font_family = font_family
+            self.font_size = font_size
+            self.font_bold = font_bold
+            self.speed = speed
+            self.looped = looped
+            self.size = size
+            self.frames = []
+        else:
+            # Open and load the file
+            f = codecs.open(filename, 'rb', 'utf-8')
+            data = json.load(f)
+            f.close()
+
+            # Get properties of the ASCIImation
+            self.font_family = data["style"]["family"]
+            self.font_size = data["style"]["size"]
+            self.font_bold = True if data["style"]["weight"] == "bold" else False
+            self.speed = data["speed"]
+            self.looped = data["loop"]
+            self.size = [data["width"], data["height"]]
+            self.frames = []
+
+            # Add all the frames
+            text = ""
+            repeat = 1
+            foreground_color = "#000000"
+            background_color = "#ffffff"
+            for frame in data["content"]:
+                if "text" in frame:
+                    text = frame["text"]
+                if "repeat" in frame:
+                    repeat = frame["repeat"]
+                if "fontColor" in frame:
+                    foreground_color = str(frame["fontColor"])
+                if "backgroundColor" in frame:
+                    background_color = str(frame["backgroundColor"])
+                self.frames.append(Frame(
+                    text=text,
+                    repeat=repeat,
+                    foreground_color=foreground_color,
+                    background_color=background_color
+                ))
 
     def __getitem__(self, key):
         if key < 0 or key > len(self):
