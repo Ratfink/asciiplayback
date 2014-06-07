@@ -22,7 +22,8 @@ class ASCIImation(object):
             # Get properties of the ASCIImation
             self.font_family = data["style"]["family"]
             self.font_size = data["style"]["size"]
-            self.font_bold = True if data["style"]["weight"] == "bold" else False
+            self.font_bold = True if data["style"]["weight"] == "bold" else \
+                False
             self.speed = data["speed"]
             self.looped = data["loop"]
             self.size = [data["width"], data["height"]]
@@ -90,7 +91,8 @@ class ASCIImation(object):
             if f_prev is None or f.foreground_color != f_prev.foreground_color:
                 ascii_dict["content"][-1]["fontColor"] = f.foreground_color
             if f_prev is None or f.background_color != f_prev.background_color:
-                ascii_dict["content"][-1]["backgroundColor"] = f.background_color
+                ascii_dict["content"][-1]["backgroundColor"] = \
+                    f.background_color
 
             f_prev = f
 
