@@ -13,7 +13,7 @@ class ASCIIPlaybackPygame(object):
         pygame.font.init()
 
         # Load the ASCIImation
-        self.player = ASCIIPlayback(argv[1])
+        self.player = ASCIIPlayback(filename=argv[1])
         self.update_font()
 
         self.size = (

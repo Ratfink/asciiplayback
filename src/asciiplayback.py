@@ -1,8 +1,13 @@
 from asciimation import *
 
 class ASCIIPlayback(object):
-    def __init__(self, filename):
-        self.asciimation = ASCIImation(filename=filename)
+    def __init__(self, filename=None, asciimation=None):
+        if filename is not None:
+            assert asciimation is None
+            self.asciimation = ASCIImation(filename=filename)
+        else:
+            assert asciimation is not None
+            self.asciimation = asciimation
         self.current_frame = 0
         self.speed = 1
         self._last_speed = 1
