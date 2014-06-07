@@ -7,7 +7,6 @@ class ASCIIPlayback(object):
         self.speed = 1
         self._last_speed = 1
 
-
     def next_frame(self):
         if self.current_frame >= len(self.asciimation):
             if self.asciimation.looped:

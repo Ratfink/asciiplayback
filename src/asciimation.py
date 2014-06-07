@@ -65,13 +65,40 @@ class ASCIImation(object):
         return length
 
     def __str__(self):
-        s = "font_family: {0}\n".format(self.font_family)
-        s += "font_size: {0}\n".format(self.font_size)
-        s += "font_bold: {0}\n".format(self.font_bold)
-        s += "speed: {0}\n".format(self.speed)
-        s += "looped: {0}\n".format(self.looped)
-        s += "size: {0}".format(self.size)
-        return s
+        # Construct a dict from this ASCIImation to convert to JSON
+        ascii_dict = {}
+        ascii_dict["style"] = {}
+        ascii_dict["style"]["family"] = self.font_family
+        ascii_dict["style"]["size"] = self.font_size
+        ascii_dict["style"]["weight"] = "bold" if self.font_bold else "normal"
+        ascii_dict["style"]["lineHeight"] = "120%"
+        ascii_dict["style"]["color"] = "#000000"
+        ascii_dict["style"]["backgroundColor"] = "#FFFFFF"
+
+        ascii_dict["speed"] = self.speed
+        ascii_dict["loop"] = self.looped
+        ascii_dict["width"] = self.size[0]
+        ascii_dict["height"] = self.size[1]
+
+        ascii_dict["content"] = []
+        f_prev = None
+        for f in self.frames:
+            ascii_dict["content"].append({"text": f.text})
+
+            if f_prev is None or f.repeat != f_prev.repeat:
+                ascii_dict["content"][-1]["repeat"] = f.repeat
+            if f_prev is None or f.foreground_color != f_prev.foreground_color:
+                ascii_dict["content"][-1]["fontColor"] = f.foreground_color
+            if f_prev is None or f.background_color != f_prev.background_color:
+                ascii_dict["content"][-1]["backgroundColor"] = f.background_color
+
+            f_prev = f
+
+        ascii_dict["metadata"] = {}
+        ascii_dict["metadata"]["duration"] = len(self)
+        ascii_dict["metadata"]["frames"] = len(self.frames)
+
+        return json.dumps(ascii_dict, separators=(',',':'))
 
 class Frame(object):
     def __init__(self, text="", repeat=1, foreground_color="#000000",
