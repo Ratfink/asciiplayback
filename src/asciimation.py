@@ -21,12 +21,12 @@ class ASCIImation(object):
 
             # Get properties of the ASCIImation
             self.font_family = data["style"]["family"]
-            self.font_size = data["style"]["size"]
+            self.font_size = int(data["style"]["size"])
             self.font_bold = True if data["style"]["weight"] == "bold" else \
                 False
-            self.speed = data["speed"]
+            self.speed = int(data["speed"])
             self.looped = data["loop"]
-            self.size = [data["width"], data["height"]]
+            self.size = [int(data["width"]), int(data["height"])]
             self.frames = []
 
             # Add all the frames
@@ -38,7 +38,7 @@ class ASCIImation(object):
                 if "text" in frame:
                     text = frame["text"]
                 if "repeat" in frame:
-                    repeat = frame["repeat"]
+                    repeat = int(frame["repeat"])
                 if "fontColor" in frame:
                     foreground_color = str(frame["fontColor"])
                 if "backgroundColor" in frame:
