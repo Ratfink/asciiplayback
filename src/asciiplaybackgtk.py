@@ -64,9 +64,11 @@ class HeaderBarWindow(Gtk.Window):
         while len(text) < self.player.asciimation.size[1]:
             text.append(' '*self.player.asciimation.size[0])
         text = '\n'.join(text[:self.player.asciimation.size[1]])
-        widget.set_markup('<span size="{0}" background="{1}" foreground="{2}"\
- font_family="{3},monospace">{4}</span>'.format(self.player.asciimation.font_size*1024,
-                          asciiframe.background_color, asciiframe.foreground_color,
+
+        # Draw the string and background
+        widget.set_markup('<span size="{0}" foreground="{1}"\
+ font_family="{2},monospace">{3}</span>'.format(self.player.asciimation.font_size*1024,
+                          asciiframe.foreground_color,
                           self.player.asciimation.font_family, text))
         widget.modify_bg(Gtk.StateType.NORMAL, Gdk.Color.parse(asciiframe.background_color)[1])
 
