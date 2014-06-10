@@ -16,6 +16,7 @@ class HeaderBarWindow(Gtk.Window):
         label = Gtk.Label()
         label.set_alignment(0, 0)
         label.set_width_chars(self.player.asciimation.size[0])
+        label.set_max_width_chars(self.player.asciimation.size[0])
         labelbox.pack_start(label, True, True, 0)
         box.pack_start(labelbox, True, True, 0)
         self.do_animate(label)
@@ -52,16 +53,27 @@ class HeaderBarWindow(Gtk.Window):
 
     def do_animate(self, widget):
         asciiframe = self.player.next_frame()
+
+        # Process the string to make each line the correct length, and ensure
+        # that there is exactly the right number of lines.  Perhaps this
+        # should be somewhere in the model code...
+        text = []
+        for line in asciiframe.text.split('\n'):
+            text.append("{{: <{}s}}".format(self.player.asciimation.size[0]).format(line))
+            text[-1] = text[-1][:self.player.asciimation.size[0]]
+        while len(text) < self.player.asciimation.size[1]:
+            text.append(' '*self.player.asciimation.size[0])
+        text = '\n'.join(text[:self.player.asciimation.size[1]])
         widget.set_markup('<span size="{0}" background="{1}" foreground="{2}"\
  font_family="{3},monospace">{4}</span>'.format(self.player.asciimation.font_size*1024,
                           asciiframe.background_color, asciiframe.foreground_color,
-                          self.player.asciimation.font_family, asciiframe.text))
+                          self.player.asciimation.font_family, text))
         widget.modify_bg(Gtk.StateType.NORMAL, Gdk.Color.parse(asciiframe.background_color)[1])
 
         GObject.timeout_add(self.player.asciimation.speed, self.do_animate, widget)
 
     def do_previous(self, button):
-        self.player.restart()
+        self.player.to_start()
 
     def do_rewind(self, button):
         self.player.rewind()
@@ -77,7 +89,7 @@ class HeaderBarWindow(Gtk.Window):
         self.player.fast_forward()
 
     def do_next(self, button):
-        pass
+        self.player.to_end()
 
 win = HeaderBarWindow()
 win.connect("delete-event", Gtk.main_quit)

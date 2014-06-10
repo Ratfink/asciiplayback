@@ -32,8 +32,14 @@ class ASCIIPlayback(object):
         return self.asciimation[int(self.current_frame-self.speed) % \
                                 len(self.asciimation)]
 
-    def restart(self):
+    def to_start(self):
         self.current_frame = 0
+
+    def to_end(self):
+        self.current_frame = len(self.asciimation) - 1
+
+    def restart(self):
+        self.to_start()
         self.speed = 1
 
     def toggle_playing(self):
