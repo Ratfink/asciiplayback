@@ -6,7 +6,7 @@ from asciiplayback import *
 class HeaderBarWindow(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self, title="ASCIIPlayback")
-        self.set_default_size(400, 200)
+        self.set_default_size(0, 0)
 
         self.player = ASCIIPlayback(filename=sys.argv[1])
 
@@ -17,8 +17,8 @@ class HeaderBarWindow(Gtk.Window):
         label.set_alignment(0, 0)
         label.set_width_chars(self.player.asciimation.size[0])
         label.set_max_width_chars(self.player.asciimation.size[0])
-        labelbox.pack_start(label, True, True, 0)
-        box.pack_start(labelbox, True, True, 0)
+        labelbox.pack_start(label, True, False, 0)
+        box.pack_start(labelbox, True, False, 0)
         self.do_animate(label)
 
         ab = Gtk.ActionBar()
