@@ -16,14 +16,14 @@ class ASCIIPlayback(object):
         if self.current_frame >= len(self.asciimation):
             if self.asciimation.looped:
                 self.current_frame = \
-                    self.current_frame % (len(self.asciimation) - 1)
+                    self.current_frame % max((len(self.asciimation) - 1), 1)
             else:
                 self.current_frame = len(self.asciimation) - 1
                 self.speed = 0
         elif self.current_frame < 0:
             if self.asciimation.looped:
                 self.current_frame = len(self.asciimation) - 1 - \
-                    -self.current_frame % (len(self.asciimation) - 1)
+                    -self.current_frame % max((len(self.asciimation) - 1), 1)
             else:
                 self.current_frame = 0
                 self.speed = 0

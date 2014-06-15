@@ -8,20 +8,27 @@ class ASCIIPlaybackGtk(Gtk.Window):
         Gtk.Window.__init__(self, title="ASCIIPlayback")
         self.set_default_size(0, 0)
 
-        print('\n'.join(Gtk.IconTheme().list_icons()))
+        if len(sys.argv) > 1:
+            self.filename = sys.argv[1]
+            self.player = ASCIIPlayback(filename=self.filename)
+        else:
+            self.filename = ""
+            blank_asciimation = ASCIImation(font_family='monospace', size=[15, 3])
+            blank_asciimation.frames.append(Frame(text='\nNo file loaded!\n'))
+            self.player = ASCIIPlayback(asciimation=blank_asciimation)
 
-        self.player = ASCIIPlayback(filename=sys.argv[1])
 
         hb = Gtk.HeaderBar()
         hb.props.show_close_button = True
         hb.props.title = "ASCIIPlayback"
-        hb.props.subtitle = sys.argv[1]
+        hb.props.subtitle = self.filename
         hb.props.has_subtitle = True
         self.set_titlebar(hb)
 
         button = Gtk.Button(image=Gtk.Image.new_from_gicon(Gio.ThemedIcon(
                             name="document-open-symbolic"),
                             Gtk.IconSize.BUTTON))
+        button.connect("clicked", self.do_open)
         hb.pack_start(button)
 
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
@@ -41,14 +48,14 @@ class ASCIIPlaybackGtk(Gtk.Window):
         Gtk.StyleContext.add_class(ab_buttons.get_style_context(), "linked")
 
         btn_previous = Gtk.Button(image=Gtk.Image.new_from_gicon(Gio.ThemedIcon(
-                              name="media-skip-backward-symbolic"),
-                              Gtk.IconSize.BUTTON))
+                                  name="media-skip-backward-symbolic"),
+                                  Gtk.IconSize.BUTTON))
         btn_previous.connect("clicked", self.do_previous)
         ab_buttons.add(btn_previous)
 
         btn_rewind = Gtk.Button(image=Gtk.Image.new_from_gicon(Gio.ThemedIcon(
-                              name="media-seek-backward-symbolic"),
-                              Gtk.IconSize.BUTTON))
+                                name="media-seek-backward-symbolic"),
+                                Gtk.IconSize.BUTTON))
         btn_rewind.connect("clicked", self.do_rewind)
         ab_buttons.add(btn_rewind)
 
@@ -59,8 +66,8 @@ class ASCIIPlaybackGtk(Gtk.Window):
         ab_buttons.add(btn_play)
 
         btn_forward = Gtk.Button(image=Gtk.Image.new_from_gicon(Gio.ThemedIcon(
-                              name="media-seek-forward-symbolic"),
-                              Gtk.IconSize.BUTTON))
+                                 name="media-seek-forward-symbolic"),
+                                 Gtk.IconSize.BUTTON))
         btn_forward.connect("clicked", self.do_forward)
         ab_buttons.add(btn_forward)
 
@@ -116,6 +123,34 @@ class ASCIIPlaybackGtk(Gtk.Window):
 
     def do_next(self, button):
         self.player.to_end()
+
+    def do_open(self, button):
+        dialog = Gtk.FileChooserDialog("Open", self,
+            Gtk.FileChooserAction.OPEN,
+            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+             Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+
+        self.add_filters(dialog)
+
+        response = dialog.run()
+        if response == Gtk.ResponseType.OK:
+            self.filename = dialog.get_filename()
+            self.player = ASCIIPlayback(filename=self.filename)
+        elif response == Gtk.ResponseType.CANCEL:
+            pass
+
+        dialog.destroy()
+
+    def add_filters(self, dialog):
+        filter_json = Gtk.FileFilter()
+        filter_json.set_name("JSON files")
+        filter_json.add_mime_type("application/json")
+        dialog.add_filter(filter_json)
+
+        filter_any = Gtk.FileFilter()
+        filter_any.set_name("All files")
+        filter_any.add_pattern("*")
+        dialog.add_filter(filter_any)
 
 win = ASCIIPlaybackGtk()
 win.connect("delete-event", Gtk.main_quit)

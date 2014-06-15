@@ -3,7 +3,7 @@ import json
 
 class ASCIImation(object):
     def __init__(self, font_family="courier new", font_size=12,
-                 font_bold=False, speed=500, looped=True, size=[20, 10],
+                 font_bold=False, speed=100, looped=True, size=[20, 10],
                  filename=None):
         if filename is None:
             self.font_family = font_family
