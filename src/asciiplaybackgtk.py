@@ -3,12 +3,26 @@ import sys
 from gi.repository import Gtk, Gio, Gdk, GObject
 from asciiplayback import *
 
-class HeaderBarWindow(Gtk.Window):
+class ASCIIPlaybackGtk(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self, title="ASCIIPlayback")
         self.set_default_size(0, 0)
 
+        print('\n'.join(Gtk.IconTheme().list_icons()))
+
         self.player = ASCIIPlayback(filename=sys.argv[1])
+
+        hb = Gtk.HeaderBar()
+        hb.props.show_close_button = True
+        hb.props.title = "ASCIIPlayback"
+        hb.props.subtitle = sys.argv[1]
+        hb.props.has_subtitle = True
+        self.set_titlebar(hb)
+
+        button = Gtk.Button(image=Gtk.Image.new_from_gicon(Gio.ThemedIcon(
+                            name="document-open-symbolic"),
+                            Gtk.IconSize.BUTTON))
+        hb.pack_start(button)
 
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 
@@ -26,23 +40,33 @@ class HeaderBarWindow(Gtk.Window):
         ab_buttons = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         Gtk.StyleContext.add_class(ab_buttons.get_style_context(), "linked")
 
-        btn_previous = Gtk.Button(image=Gtk.Image(stock=Gtk.STOCK_MEDIA_PREVIOUS))
+        btn_previous = Gtk.Button(image=Gtk.Image.new_from_gicon(Gio.ThemedIcon(
+                              name="media-skip-backward-symbolic"),
+                              Gtk.IconSize.BUTTON))
         btn_previous.connect("clicked", self.do_previous)
         ab_buttons.add(btn_previous)
 
-        btn_rewind = Gtk.Button(image=Gtk.Image(stock=Gtk.STOCK_MEDIA_REWIND))
+        btn_rewind = Gtk.Button(image=Gtk.Image.new_from_gicon(Gio.ThemedIcon(
+                              name="media-seek-backward-symbolic"),
+                              Gtk.IconSize.BUTTON))
         btn_rewind.connect("clicked", self.do_rewind)
         ab_buttons.add(btn_rewind)
 
-        btn_play = Gtk.Button(image=Gtk.Image(stock=Gtk.STOCK_MEDIA_PAUSE))
+        btn_play = Gtk.Button(image=Gtk.Image.new_from_gicon(Gio.ThemedIcon(
+                              name="media-playback-pause-symbolic"),
+                              Gtk.IconSize.BUTTON))
         btn_play.connect("clicked", self.do_play)
         ab_buttons.add(btn_play)
 
-        btn_forward = Gtk.Button(image=Gtk.Image(stock=Gtk.STOCK_MEDIA_FORWARD))
+        btn_forward = Gtk.Button(image=Gtk.Image.new_from_gicon(Gio.ThemedIcon(
+                              name="media-seek-forward-symbolic"),
+                              Gtk.IconSize.BUTTON))
         btn_forward.connect("clicked", self.do_forward)
         ab_buttons.add(btn_forward)
 
-        btn_next = Gtk.Button(image=Gtk.Image(stock=Gtk.STOCK_MEDIA_NEXT))
+        btn_next = Gtk.Button(image=Gtk.Image.new_from_gicon(Gio.ThemedIcon(
+                              name="media-skip-forward-symbolic"),
+                              Gtk.IconSize.BUTTON))
         btn_next.connect("clicked", self.do_next)
         ab_buttons.add(btn_next)
 
@@ -83,9 +107,9 @@ class HeaderBarWindow(Gtk.Window):
     def do_play(self, button):
         self.player.toggle_playing()
         if self.player.speed == 0:
-            button.set_image(Gtk.Image(stock=Gtk.STOCK_MEDIA_PLAY))
+            button.set_image(Gtk.Image.new_from_gicon(Gio.ThemedIcon(name="media-playback-start-symbolic"), Gtk.IconSize.BUTTON))
         else:
-            button.set_image(Gtk.Image(stock=Gtk.STOCK_MEDIA_PAUSE))
+            button.set_image(Gtk.Image.new_from_gicon(Gio.ThemedIcon(name="media-playback-pause-symbolic"), Gtk.IconSize.BUTTON))
 
     def do_forward(self, button):
         self.player.fast_forward()
