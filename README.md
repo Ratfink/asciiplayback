@@ -8,13 +8,28 @@
     """""""""""""""""""""""""""""""""""""""""""
 
 ASCIIPlayback is a program which plays files from
-[ASCIImator](http://asciimator.net/).  It depends on Python 2 (tested with
-2.7.6) and Pygame (tested with 1.9.1).  ASCIIPlayback is licensed under the MIT
+[ASCIImator](http://asciimator.net/).  ASCIIPlayback is licensed under the MIT
 license; see `LICENSE` for details.
+
+## Dependencies
+
+### `download_asciimation.py`
+
+* Python 2 (tested with 2.7.7)
+
+### Pygame Player
+
+* Python 2 (tested with 2.7.7)
+* Pygame (tested with 1.9.1)
+
+### GTK Player
+
+* Python 3 (tested with 3.4.1)
+* PyGObject (tested with 3.12.2)
 
 ## Usage
 
-### Downloading
+### `download_asciimation.py`
 
 ASCIImations are currently downloaded by download\_asciimation.py, which is
 used as follows:
@@ -31,7 +46,7 @@ be this:
 The default filename is the number of the ASCIImation, but this can be changed
 using the -o option.
 
-### Playing
+### Pygame Player
 
 Once an ASCIImation has been downloaded, it can be played using ASCIIPlayback.
 This is done as follows:
@@ -46,13 +61,19 @@ Following our example above, this would be something like:
 A window should appear with the ASCIImation playing.  The player can be
 controlled as described in the Controls section below.
 
-## Controls
+#### Controls
 
 * **Left mouse**: restart ASCIImation
 * **Esc**, **Q**: quit
 * **Space**: pause/play
 * **PgUp**: rewind (3 levels, x2, x4, and x8)
 * **PgDn**: fast-forward (3 levels, x2, x4, and x8)
+
+### GTK Player
+
+The GTK player can be started the same as the Pygame player, but the filename
+is optional.  ASCIImation files can be loaded from within the GUI at any time,
+and the controls are all clickable buttons at the bottom of the window.
 
 ## Notes
 
