@@ -117,7 +117,7 @@ class ASCIIPlaybackGtk(Gtk.Window):
     def do_next(self, button):
         self.player.to_end()
 
-win = HeaderBarWindow()
+win = ASCIIPlaybackGtk()
 win.connect("delete-event", Gtk.main_quit)
 win.show_all()
 Gtk.main()
