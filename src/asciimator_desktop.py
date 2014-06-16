@@ -86,17 +86,81 @@ class ASCIImatorDesktop(Gtk.Window):
         left = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 
         expander_scroll = Gtk.ScrolledWindow()
+        expander_scroll.set_policy(Gtk.PolicyType.NEVER,
+                                   Gtk.PolicyType.AUTOMATIC)
         expander_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 
         expander = Gtk.Expander()
         expander.props.use_markup = True
         expander.props.label = "<big>View</big>"
-        view = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        view.add(Gtk.Switch())
-        view.add(Gtk.SpinButton.new_with_range(0, 1000, 5))
-        view.add(Gtk.FontButton())
-        view.add(Gtk.SpinButton.new_with_range(1, 1000, 1))
-        view.add(Gtk.SpinButton.new_with_range(1, 1000, 1))
+        view = Gtk.ListBox()
+        view.set_selection_mode(Gtk.SelectionMode.NONE)
+        optionsize = Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL)
+
+        row = Gtk.ListBoxRow()
+        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
+        row.add(hbox)
+        label = Gtk.Label("Loop", xalign=0)
+        switch = Gtk.Switch()
+        switch.set_active(True)
+        hbox.pack_start(label, True, True, 12)
+        hbox.pack_start(switch, False, True, 12)
+        Gtk.StyleContext.add_class(row.get_style_context(), "option")
+
+        view.add(row)
+
+        row = Gtk.ListBoxRow()
+        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
+        row.add(hbox)
+        label = Gtk.Label("ms/frame", xalign=0)
+        spin = Gtk.SpinButton.new_with_range(0, 1000, 5)
+        spin.set_value(100)
+        optionsize.add_widget(spin)
+        hbox.pack_start(label, True, True, 12)
+        hbox.pack_start(spin, False, True, 12)
+        Gtk.StyleContext.add_class(row.get_style_context(), "option")
+
+        view.add(row)
+
+        row = Gtk.ListBoxRow()
+        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
+        row.add(hbox)
+        label = Gtk.Label("Font", xalign=0)
+        font = Gtk.FontButton()
+        font.set_font_name("Courier New 12")
+        optionsize.add_widget(font)
+        hbox.pack_start(label, True, True, 12)
+        hbox.pack_start(font, False, True, 12)
+        Gtk.StyleContext.add_class(row.get_style_context(), "option")
+
+        view.add(row)
+
+        row = Gtk.ListBoxRow()
+        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
+        row.add(hbox)
+        label = Gtk.Label("Width", xalign=0)
+        spin = Gtk.SpinButton.new_with_range(0, 1000, 5)
+        spin.set_value(20)
+        optionsize.add_widget(spin)
+        hbox.pack_start(label, True, True, 12)
+        hbox.pack_start(spin, False, True, 12)
+        Gtk.StyleContext.add_class(row.get_style_context(), "option")
+
+        view.add(row)
+
+        row = Gtk.ListBoxRow()
+        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
+        row.add(hbox)
+        label = Gtk.Label("Height", xalign=0)
+        spin = Gtk.SpinButton.new_with_range(0, 1000, 5)
+        spin.set_value(10)
+        optionsize.add_widget(spin)
+        hbox.pack_start(label, True, True, 12)
+        hbox.pack_start(spin, False, True, 12)
+        Gtk.StyleContext.add_class(row.get_style_context(), "option")
+
+        view.add(row)
+
         expander.add(view)
         expander.set_expanded(True)
         expander_box.add(expander)
@@ -271,6 +335,14 @@ css = b"""
 .titlebar-right:dir(ltr),
 .titlebar-right:dir(rtl) {
     border-top-left-radius: 0;
+}
+
+.option {
+    padding-top: 3px;
+    background-color: @theme_bg_color;
+}
+.option:hover {
+    background-color: @theme_bg_color;
 }
 """
 
