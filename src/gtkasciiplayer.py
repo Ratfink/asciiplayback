@@ -59,11 +59,10 @@ class GtkASCIIControls(Gtk.Box):
         btn_rewind.connect("clicked", self.do_rewind)
         self.add(btn_rewind)
 
-        btn_play = Gtk.Button(image=Gtk.Image.new_from_gicon(Gio.ThemedIcon(
-                              name="media-playback-pause-symbolic"),
-                              Gtk.IconSize.BUTTON))
-        btn_play.connect("clicked", self.do_play)
-        self.add(btn_play)
+        self.btn_play = Gtk.Button()
+        self.set_play_button_icon()
+        self.btn_play.connect("clicked", self.do_play)
+        self.add(self.btn_play)
 
         btn_forward = Gtk.Button(image=Gtk.Image.new_from_gicon(Gio.ThemedIcon(
                                  name="media-seek-forward-symbolic"),
@@ -79,21 +78,28 @@ class GtkASCIIControls(Gtk.Box):
 
     def do_previous(self, button):
         self.player.to_start()
+        self.set_play_button_icon()
 
     def do_rewind(self, button):
         self.player.rewind()
+        self.set_play_button_icon()
 
     def do_play(self, button):
         self.player.toggle_playing()
-        if self.player.speed == 0:
-            button.set_image(Gtk.Image.new_from_gicon(Gio.ThemedIcon(
-                name="media-playback-start-symbolic"), Gtk.IconSize.BUTTON))
-        else:
-            button.set_image(Gtk.Image.new_from_gicon(Gio.ThemedIcon(
-                name="media-playback-pause-symbolic"), Gtk.IconSize.BUTTON))
+        self.set_play_button_icon()
 
     def do_forward(self, button):
         self.player.fast_forward()
+        self.set_play_button_icon()
 
     def do_next(self, button):
         self.player.to_end()
+        self.set_play_button_icon()
+
+    def set_play_button_icon(self):
+        if self.player.speed == 0:
+            self.btn_play.set_image(Gtk.Image.new_from_gicon(Gio.ThemedIcon(
+                name="media-playback-start-symbolic"), Gtk.IconSize.BUTTON))
+        else:
+            self.btn_play.set_image(Gtk.Image.new_from_gicon(Gio.ThemedIcon(
+                name="media-playback-pause-symbolic"), Gtk.IconSize.BUTTON))
