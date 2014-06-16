@@ -19,7 +19,7 @@ class ASCIImatorDesktop(Gtk.Window):
             self.asciimation.frames.append(Frame(text='\nNo file loaded!\n'))
             self.player = ASCIIPlayback(asciimation=self.asciimation, speed=0)
 
-        print('\n'.join(Gtk.IconTheme().list_icons()))
+#        print('\n'.join(Gtk.IconTheme().list_icons()))
 
         self.hsize_group = Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL)
 
@@ -85,11 +85,52 @@ class ASCIImatorDesktop(Gtk.Window):
     def sidebar(self):
         left = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 
+        expander_scroll = Gtk.ScrolledWindow()
+        expander_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+
+        expander = Gtk.Expander()
+        expander.props.use_markup = True
+        expander.props.label = "<big>View</big>"
+        view = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        view.add(Gtk.Switch())
+        view.add(Gtk.SpinButton.new_with_range(0, 1000, 5))
+        view.add(Gtk.FontButton())
+        view.add(Gtk.SpinButton.new_with_range(1, 1000, 1))
+        view.add(Gtk.SpinButton.new_with_range(1, 1000, 1))
+        expander.add(view)
+        expander.set_expanded(True)
+        expander_box.add(expander)
+
+        expander = Gtk.Expander()
+        expander.props.use_markup = True
+        expander.props.label = "<big>Color</big>"
+        expander.add(Gtk.ColorButton())
+        expander_box.add(expander)
+
+        expander = Gtk.Expander()
+        expander.props.use_markup = True
+        expander.props.label = "<big>Frame</big>"
+        expander.add(Gtk.FontButton())
+        expander_box.add(expander)
+
+        expander = Gtk.Expander()
+        expander.props.use_markup = True
+        expander.props.label = "<big>Layer</big>"
+        expander.add(Gtk.FontButton())
+        expander_box.add(expander)
+
+        expander = Gtk.Expander()
+        expander.props.use_markup = True
+        expander.props.label = "<big>Replace</big>"
+        expander.add(Gtk.FontButton())
+        expander_box.add(expander)
+
+        expander_scroll.add(expander_box)
+        left.pack_start(expander_scroll, True, True, 0)
+
         ab = Gtk.ActionBar()
         ab.set_center_widget(self.stack_switcher)
         left.pack_end(ab, False, False, 0)
-
-
 
         self.hsize_group.add_widget(left)
 
@@ -107,9 +148,30 @@ class ASCIImatorDesktop(Gtk.Window):
         edit = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 
         edit_window = Gtk.ScrolledWindow()
+        edit_flow = Gtk.FlowBox()
+        edit_flow.set_selection_mode(Gtk.SelectionMode.MULTIPLE)
         label = Gtk.Label()
         label.set_markup("<big>Edit coming soon...</big>")
-        edit_window.add(label)
+        edit_flow.add(label)
+        label = Gtk.Label()
+        label.set_markup("<big>Edit coming soon...</big>")
+        edit_flow.add(label)
+        label = Gtk.Label()
+        label.set_markup("<big>Edit coming soon...</big>")
+        edit_flow.add(label)
+        label = Gtk.Label()
+        label.set_markup("<big>Edit coming soon...</big>")
+        edit_flow.add(label)
+        label = Gtk.Label()
+        label.set_markup("<big>Edit coming soon...</big>")
+        edit_flow.add(label)
+        label = Gtk.Label()
+        label.set_markup("<big>Edit coming soon...</big>")
+        edit_flow.add(label)
+        label = Gtk.Label()
+        label.set_markup("<big>Edit coming soon...</big>")
+        edit_flow.add(label)
+        edit_window.add(edit_flow)
         edit.pack_start(edit_window, True, True, 0)
 
         ab = Gtk.ActionBar()
