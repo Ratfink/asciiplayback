@@ -17,7 +17,7 @@ class ASCIImatorDesktop(Gtk.Window):
             blank_asciimation.frames.append(Frame(text='\nNo file loaded!\n'))
             self.player = ASCIIPlayback(asciimation=blank_asciimation, speed=0)
 
-        print('\n'.join(Gtk.IconTheme().list_icons()))
+#        print('\n'.join(Gtk.IconTheme().list_icons()))
 
         hb = Gtk.HeaderBar()
         hb.props.show_close_button = True
@@ -108,6 +108,10 @@ class ASCIImatorDesktop(Gtk.Window):
         stack.add_titled(preview, "preview", "Preview")
         
         self.add(stack)
+
+        stack_switcher = Gtk.StackSwitcher()
+        stack_switcher.set_stack(stack)
+        hb.pack_start(stack_switcher)
 
     def do_animate(self, widget):
         asciiframe = self.player.next_frame()

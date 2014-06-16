@@ -2,6 +2,7 @@
 import sys
 from gi.repository import Gtk, Gio, Gdk, GObject
 from asciiplayback import *
+from asciimation import *
 
 class ASCIIPlaybackGtk(Gtk.Window):
     def __init__(self):
@@ -10,7 +11,7 @@ class ASCIIPlaybackGtk(Gtk.Window):
 
         if len(sys.argv) > 1:
             self.filename = sys.argv[1]
-            self.player = ASCIIPlayback(filename=self.filename)
+            self.player = ASCIIPlayback(ASCIImation(filename=self.filename))
         else:
             self.filename = ""
             blank_asciimation = ASCIImation(font_family='monospace', size=[15, 3])
@@ -135,7 +136,7 @@ class ASCIIPlaybackGtk(Gtk.Window):
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
             self.filename = dialog.get_filename()
-            self.player = ASCIIPlayback(filename=self.filename)
+            self.player = ASCIIPlayback(ASCIImation(filename=self.filename))
         elif response == Gtk.ResponseType.CANCEL:
             pass
 

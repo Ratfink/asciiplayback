@@ -5,6 +5,7 @@ from pygame.locals import *
 from sys import exit, argv
 import codecs
 from asciiplayback import *
+from asciimation import *
 
 class ASCIIPlaybackPygame(object):
     def __init__(self):
@@ -13,7 +14,7 @@ class ASCIIPlaybackPygame(object):
         pygame.font.init()
 
         # Load the ASCIImation
-        self.player = ASCIIPlayback(filename=argv[1])
+        self.player = ASCIIPlayback(ASCIImation(filename=argv[1]))
         self.update_font()
 
         self.size = (
