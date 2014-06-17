@@ -4,6 +4,7 @@ from gi.repository import Gtk, Gio, Gdk, GObject
 from asciiplayback import *
 from gtkasciiplayer import *
 from revealerexpander import *
+from frameedit import *
 
 class ASCIImatorDesktop(Gtk.Window):
     def __init__(self):
@@ -203,28 +204,23 @@ class ASCIImatorDesktop(Gtk.Window):
 
         edit_window = Gtk.ScrolledWindow()
         edit_flow = Gtk.FlowBox()
-        edit_flow.set_selection_mode(Gtk.SelectionMode.MULTIPLE)
-        label = Gtk.Label()
-        label.set_markup("<big>Edit coming soon...</big>")
-        edit_flow.add(label)
-        label = Gtk.Label()
-        label.set_markup("<big>Edit coming soon...</big>")
-        edit_flow.add(label)
-        label = Gtk.Label()
-        label.set_markup("<big>Edit coming soon...</big>")
-        edit_flow.add(label)
-        label = Gtk.Label()
-        label.set_markup("<big>Edit coming soon...</big>")
-        edit_flow.add(label)
-        label = Gtk.Label()
-        label.set_markup("<big>Edit coming soon...</big>")
-        edit_flow.add(label)
-        label = Gtk.Label()
-        label.set_markup("<big>Edit coming soon...</big>")
-        edit_flow.add(label)
-        label = Gtk.Label()
-        label.set_markup("<big>Edit coming soon...</big>")
-        edit_flow.add(label)
+        edit_flow.set_homogeneous(True)
+        frame = FrameEdit()
+        edit_flow.add(frame)
+        frame = FrameEdit()
+        edit_flow.add(frame)
+        frame = FrameEdit()
+        edit_flow.add(frame)
+        frame = FrameEdit()
+        edit_flow.add(frame)
+        frame = FrameEdit()
+        edit_flow.add(frame)
+        frame = FrameEdit()
+        edit_flow.add(frame)
+        frame = FrameEdit()
+        edit_flow.add(frame)
+        frame = FrameEdit()
+        edit_flow.add(frame)
         edit_window.add(edit_flow)
         edit.pack_start(edit_window, True, True, 0)
 
