@@ -3,11 +3,12 @@ import sys
 from gi.repository import Gtk, Gio, Gdk, GObject
 from asciiplayback import *
 from gtkasciiplayer import *
+from revealerexpander import *
 
 class ASCIImatorDesktop(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self, title="ASCIImator Desktop")
-        self.set_default_size(400, 200)
+        self.set_default_size(640, 400)
 
         if len(sys.argv) > 1:
             self.filename = sys.argv[1]
@@ -90,9 +91,7 @@ class ASCIImatorDesktop(Gtk.Window):
                                    Gtk.PolicyType.AUTOMATIC)
         expander_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 
-        expander = Gtk.Expander()
-        expander.props.use_markup = True
-        expander.props.label = "<big>View</big>"
+        expander = RevealerExpander("_View")
         view = Gtk.ListBox()
         view.set_selection_mode(Gtk.SelectionMode.NONE)
         optionsize = Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL)
@@ -126,11 +125,10 @@ class ASCIImatorDesktop(Gtk.Window):
         hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
         row.add(hbox)
         label = Gtk.Label("Font", xalign=0)
-        font = Gtk.FontButton()
-        font.set_font_name("Courier New 12")
+        font = Gtk.FontButton.new_with_font("Courier New 12")
         optionsize.add_widget(font)
         hbox.pack_start(label, True, True, 12)
-        hbox.pack_start(font, False, True, 12)
+        hbox.pack_start(font, False, False, 12)
         Gtk.StyleContext.add_class(row.get_style_context(), "option")
 
         view.add(row)
@@ -139,7 +137,7 @@ class ASCIImatorDesktop(Gtk.Window):
         hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
         row.add(hbox)
         label = Gtk.Label("Width", xalign=0)
-        spin = Gtk.SpinButton.new_with_range(0, 1000, 5)
+        spin = Gtk.SpinButton.new_with_range(1, 1000, 1)
         spin.set_value(20)
         optionsize.add_widget(spin)
         hbox.pack_start(label, True, True, 12)
@@ -152,7 +150,7 @@ class ASCIImatorDesktop(Gtk.Window):
         hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
         row.add(hbox)
         label = Gtk.Label("Height", xalign=0)
-        spin = Gtk.SpinButton.new_with_range(0, 1000, 5)
+        spin = Gtk.SpinButton.new_with_range(1, 1000, 1)
         spin.set_value(10)
         optionsize.add_widget(spin)
         hbox.pack_start(label, True, True, 12)
@@ -165,27 +163,19 @@ class ASCIImatorDesktop(Gtk.Window):
         expander.set_expanded(True)
         expander_box.add(expander)
 
-        expander = Gtk.Expander()
-        expander.props.use_markup = True
-        expander.props.label = "<big>Color</big>"
+        expander = RevealerExpander("_Color")
         expander.add(Gtk.ColorButton())
         expander_box.add(expander)
 
-        expander = Gtk.Expander()
-        expander.props.use_markup = True
-        expander.props.label = "<big>Frame</big>"
+        expander = RevealerExpander("_Frame")
         expander.add(Gtk.FontButton())
         expander_box.add(expander)
 
-        expander = Gtk.Expander()
-        expander.props.use_markup = True
-        expander.props.label = "<big>Layer</big>"
+        expander = RevealerExpander("_Layer")
         expander.add(Gtk.FontButton())
         expander_box.add(expander)
 
-        expander = Gtk.Expander()
-        expander.props.use_markup = True
-        expander.props.label = "<big>Replace</big>"
+        expander = RevealerExpander("_Replace")
         expander.add(Gtk.FontButton())
         expander_box.add(expander)
 
