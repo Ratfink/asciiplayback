@@ -1,4 +1,4 @@
-from gi.repository import Gtk, Gio, Gdk, GObject
+from gi.repository import Gtk, Gio, Gdk, GObject, Pango
 from asciiplayback import *
 from asciimation import *
 
@@ -33,7 +33,7 @@ class GtkASCIIPlayer(Gtk.Box):
 
         # Draw the string and background
         widget.set_markup('<span size="{0}" foreground="{1}"\
- font_family="{2},monospace">{3}</span>'.format(self.player.asciimation.font_size*1024,
+ font_family="{2},monospace">{3}</span>'.format(self.player.asciimation.font_size*Pango.SCALE,
                           asciiframe.foreground_color,
                           self.player.asciimation.font_family, text))
         widget.modify_bg(Gtk.StateType.NORMAL, Gdk.Color.parse(asciiframe.background_color)[1])
