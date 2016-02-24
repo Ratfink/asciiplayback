@@ -1,6 +1,9 @@
 #!/usr/bin/env python
+import os.path
 import sys
+
 from gi.repository import Gtk, Gio, Gdk, GObject
+
 from asciiplayback import *
 from asciimation import *
 from gtkasciiplayer import *
@@ -19,19 +22,14 @@ class ASCIIPlaybackGtk(Gtk.Window):
             blank_asciimation.frames.append(Frame(text='\nNo file loaded!\n'))
             self.player = ASCIIPlayback(asciimation=blank_asciimation)
 
-
-        hb = Gtk.HeaderBar()
-        hb.props.show_close_button = True
-        hb.props.title = "ASCIIPlayback"
-        hb.props.subtitle = self.filename
-        hb.props.has_subtitle = True
-        self.set_titlebar(hb)
+        self.hb = Gtk.HeaderBar()
+        self.update_headerbar()
 
         button = Gtk.Button(image=Gtk.Image.new_from_gicon(Gio.ThemedIcon(
                             name="document-open-symbolic"),
                             Gtk.IconSize.BUTTON))
         button.connect("clicked", self.do_open)
-        hb.pack_start(button)
+        self.hb.pack_start(button)
 
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 
@@ -60,6 +58,7 @@ class ASCIIPlaybackGtk(Gtk.Window):
             self.player = ASCIIPlayback(ASCIImation(filename=self.filename))
             self.video.player = self.player
             self.controls.player = self.player
+            self.update_headerbar()
         elif response == Gtk.ResponseType.CANCEL:
             pass
 
@@ -75,6 +74,13 @@ class ASCIIPlaybackGtk(Gtk.Window):
         filter_any.set_name("All files")
         filter_any.add_pattern("*")
         dialog.add_filter(filter_any)
+
+    def update_headerbar(self):
+        self.hb.props.show_close_button = True
+        self.hb.props.title = "ASCIIPlayback"
+        self.hb.props.subtitle = os.path.basename(self.filename)
+        self.hb.props.has_subtitle = True
+        self.set_titlebar(self.hb)
 
 win = ASCIIPlaybackGtk()
 win.connect("delete-event", Gtk.main_quit)
