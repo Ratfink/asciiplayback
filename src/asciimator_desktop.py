@@ -204,7 +204,9 @@ class ASCIImatorDesktop(Gtk.Window):
 
         edit_window = Gtk.ScrolledWindow()
         edit_flow = Gtk.FlowBox()
-        edit_flow.set_homogeneous(True)
+        edit_flow.set_homogeneous(False)
+        edit_flow.set_column_spacing(12)
+        edit_flow.set_row_spacing(12)
         frame = FrameEdit()
         edit_flow.add(frame)
         frame = FrameEdit()

@@ -15,18 +15,22 @@ class FrameEdit(Gtk.FlowBoxChild):
         self.font = Pango.FontDescription.from_string("dejavu sans mono 12")
         self.textview.override_font(self.font)
         self.scrolledwindow.add(self.textview)
+
+        # Set the ScrolledWindow large enough to show the whole frame
         context = self.textview.get_pango_context()
         metrics = context.get_metrics(self.font)
         width = 20 * metrics.get_approximate_digit_width() / Pango.SCALE + 1
         height = 10 * (metrics.get_ascent() + metrics.get_descent()) / Pango.SCALE
         self.scrolledwindow.set_size_request(width, height)
+
+        # Add the ScrolledWindow
         self.hbox.pack_start(self.scrolledwindow, False, False, 0)
         self.vbox.pack_start(self.hbox, False, False, 0)
 
         self.hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         self.hbox.pack_start(Gtk.Label(self.get_index()), False, False, 0)
         self.hbox.pack_end(Gtk.SpinButton(), False, False, 0)
-        self.vbox.pack_end(self.hbox, False, False, 0)
+        self.vbox.pack_start(self.hbox, False, False, 0)
 
         self.add(self.vbox)
 
