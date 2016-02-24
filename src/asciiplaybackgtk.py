@@ -18,8 +18,8 @@ class ASCIIPlaybackGtk(Gtk.Window):
             self.player = ASCIIPlayback(ASCIImation(filename=self.filename))
         else:
             self.filename = ""
-            blank_asciimation = ASCIImation(font_family='monospace', size=[15, 3])
-            blank_asciimation.frames.append(Frame(text='\nNo file loaded!\n'))
+            blank_asciimation = ASCIImation(font_family='monospace', size=[19, 3])
+            blank_asciimation.frames.append(Frame(text='\n  No file loaded!  \n'))
             self.player = ASCIIPlayback(asciimation=blank_asciimation)
 
         self.hb = Gtk.HeaderBar()
@@ -82,7 +82,11 @@ class ASCIIPlaybackGtk(Gtk.Window):
         self.hb.props.has_subtitle = True
         self.set_titlebar(self.hb)
 
-win = ASCIIPlaybackGtk()
-win.connect("delete-event", Gtk.main_quit)
-win.show_all()
-Gtk.main()
+def run():
+    win = ASCIIPlaybackGtk()
+    win.connect("delete-event", Gtk.main_quit)
+    win.show_all()
+    Gtk.main()
+
+if __name__ == '__main__':
+    run()
