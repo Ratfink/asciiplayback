@@ -13,6 +13,10 @@ class GtkASCIIPlayer(Gtk.Box):
         label.set_alignment(0, 0)
         label.set_width_chars(self.player.asciimation.size[0])
         label.set_max_width_chars(self.player.asciimation.size[0])
+        self._label_attrs = Pango.AttrList()
+        self._label_attrs.insert(Pango.attr_size_new(self.player.asciimation.font_size*Pango.SCALE))
+        self._label_attrs.insert(Pango.attr_family_new(self.player.asciimation.font_family + ",monospace"))
+        label.set_attributes(self._label_attrs)
         labelbox.pack_start(label, True, False, 0)
         self.pack_start(labelbox, True, False, 0)
         self.do_animate(label)
@@ -32,10 +36,11 @@ class GtkASCIIPlayer(Gtk.Box):
         text = '\n'.join(text[:self.player.asciimation.size[1]])
 
         # Draw the string and background
-        widget.set_markup('<span size="{0}" foreground="{1}"\
- font_family="{2},monospace">{3}</span>'.format(self.player.asciimation.font_size*Pango.SCALE,
-                          asciiframe.foreground_color,
-                          self.player.asciimation.font_family, text))
+        fg = Gdk.Color.parse(asciiframe.foreground_color)[1].to_floats()
+        fg_pango = (int(x * 65535) for x in fg)
+        self._label_attrs.change(Pango.attr_foreground_new(*fg_pango))
+        widget.set_attributes(self._label_attrs)
+        widget.set_text(text)
         widget.modify_bg(Gtk.StateType.NORMAL, Gdk.Color.parse(asciiframe.background_color)[1])
 
         GObject.timeout_add(self.player.asciimation.speed, self.do_animate, widget)
