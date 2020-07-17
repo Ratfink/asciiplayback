@@ -15,7 +15,7 @@ license; see `LICENSE` for details.
 
 ### `download_asciimation.py`
 
-* Python 2 (tested with 2.7.7)
+* Python 3 (3.5+ should be fine)
 
 ### Pygame Player
 
